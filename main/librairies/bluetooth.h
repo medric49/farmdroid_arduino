@@ -52,7 +52,7 @@ void bluetooth_envoyer_acidite(double value) {
 
 void bluetooth_envoyer_luminosite(double value) {
     char* string;
-    createCryptedString(CODE_SEND_ACIDITE_VAL,value,&string);
+    createCryptedString(CODE_SEND_LUMINOSITE_VAL,value,&string);
     mybluetooth.print(string);
     Serial.println(string);
 }
