@@ -52,24 +52,34 @@ void loop() {
     manivelle_temperature_humidite(&arrosage_autorise, &arrosage_active, &temperature_max, &humidite_max, &flag_lumiere);
     manivelle_securite(&distance_autorise, &distance_max, &flag_distance);
     manivelle_acidite(&acidite_max, &flag_acidite);
-
     if (mybluetooth.available()) {
         int i = 0;
         int flag = 0;
+        int d = 0;
+        int e = 0;
         do {
             char x = (char)mybluetooth.read();
-            if (x != '\0')
-                bluetooth_response[i++] = x;
-            else
-                flag = 1;
+            if (d==0 && x == ':' )
+            {
+              d = 1;
+              
+            }
+            else if(d==1 && x!= '_' ) {
+              bluetooth_response[i++] = x;
+            }
+            else if(d==1 && x=='_' ) {
+                  e = 1;
+                  bluetooth_response[i++] = '\0';
+            }
             delay(5);
-        } while (mybluetooth.available() && (flag==0));
-
-
-        manivelle_bluetooth_lumiere(&lumiere_autorise, &lumiere_active, &lumiere_max, &flag_lumiere, bluetooth_response);
+        } while (mybluetooth.available() && (e==0));
+        if(d==1 && e==1) {
+          manivelle_bluetooth_lumiere(&lumiere_autorise, &lumiere_active, &lumiere_max, &flag_lumiere, bluetooth_response);
         manivelle_bluetooth_temperature_humidite(&arrosage_autorise, &arrosage_active, &temperature_max, &humidite_max, &flag_arrosage, bluetooth_response);
         manivelle_bluetooth_acidite(&acidite_max, &flag_acidite, bluetooth_response);
-        manivelle_bluetooth_distance(&distance_autorise, &distance_max, &flag_distance, bluetooth_response);
+        manivelle_bluetooth_distance(&distance_autorise, &distance_max, &flag_distance, bluetooth_response);  
+        }
+        
     }
     delay(500);
 }

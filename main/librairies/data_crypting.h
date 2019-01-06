@@ -46,8 +46,6 @@ void substring(char* string,char** result,int c) {
 }
 
 double getCryptedValue(char* chaine) {
-    char* t;
-    substring(chaine,&t,2);
-    return atof(t);
+    return atof(&chaine[1]);
 }
 
