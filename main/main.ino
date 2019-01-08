@@ -1,7 +1,11 @@
 #include <SoftwareSerial.h>
+#include <Servo.h>
 #include <string.h>
 #include <stdlib.h>
 #include <string.h>
+
+Servo myservo;  // create servo object to control a servo
+
 
 #include "librairies/data_crypting.h"
 #include "librairies/bluetooth.h"
@@ -34,11 +38,11 @@ int flag_distance = 0;
 
 
 char bluetooth_response[100] = {0};
-
 void setup() {
     Serial.begin(9600);
     mybluetooth.begin(9600);
-
+    myservo.attach(8);
+    myservo.write(0);
 
     pinMode(LUM_DIGITAL_PIN, OUTPUT);
     digitalWrite(LUM_DIGITAL_PIN, LOW);

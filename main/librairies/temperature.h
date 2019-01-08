@@ -5,11 +5,18 @@ const int PIN_ANALOG_CAP_HUM = 2;
 
 void active_arrosage(int *flag_arrosage) {
     *flag_arrosage = 1;
+    if (myservo.read()!=90) {
+      myservo.write(90);
+    }
+
     bluetooth_envoyer_arrosage_flag(*flag_arrosage);
 }
 
 void desactive_arrosage(int *flag_arrosage) {
     *flag_arrosage = 0;
+    if (myservo.read()!=0) {
+      myservo.write(0);
+    }
     bluetooth_envoyer_arrosage_flag(*flag_arrosage);
 }
 
@@ -23,8 +30,10 @@ void manivelle_temperature_humidite(int *arrosage_autorise, int *arrosage_active
 
     double val_temperature = (val1 + val2) / 2;
 
-    double val_humidite = 0;
+    double val_humidite = analogRead(PIN_ANALOG_CAP_HUM);
+    val_humidite = map(val_humidite,0,1023,0,100);
 
+    val_humidite = map(val_humidite,0,40,0,100);
     bluetooth_envoyer_temperature(val_temperature);
 
     bluetooth_envoyer_humidite(val_humidite);
